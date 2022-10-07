@@ -1,0 +1,64 @@
+//mixinは@include mixin名 で呼び出す
+@use 'variable' as v;
+//PCファーストのブレイクポイント
+$pc-breakpoints: (
+  sp: 768px,
+);
+
+//SPファーストのブレイクポイント
+$sp-breakpoints: (
+  pc: 769px,
+);
+
+//PCファーストのメディアクエリ呼び出し 呼び出すときは大きい順に記述
+
+@mixin sp {
+  @media only screen and (max-width: map-get($pc-breakpoints, sp)) {
+    @content;
+  }
+}
+/////////////////////////
+
+//SPファーストのメディアクエリ呼び出し 呼び出すときは小さい順に記述
+@mixin pc {
+  @media only screen and (min-width: map-get($sp-breakpoints, pc)) {
+    @content;
+  }
+}
+
+////////////////////////
+
+//flexを使用した上下中央寄せ 親要素に指定
+@mixin centerd_flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+//transformを使用した中央寄せ、目的に応じて引数にxy,x,yのいずれかを渡して指定
+@mixin centerd_transformY {
+  position: absolute;
+  top: 50%;
+  transform: translatey(-50%);
+}
+@mixin centerd_transformX {
+  position: absolute;
+  left: 50%;
+  transform: translatex(-50%);
+}
+@mixin centerd_transformXY {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+//line-heightの計算
+@mixin l_height($height, $f_size) {
+  line-height: $height / $f_size;
+}
+//letter-spacingの計算
+@mixin l_spacing($space) {
+  letter-spacing: $space / 1000 + em;
+}

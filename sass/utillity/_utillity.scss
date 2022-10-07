@@ -1,0 +1,18 @@
+@use '../global' as g;
+.br-xs {
+  @media (max-width: 340px) {
+    display: none;
+  }
+}
+
+.br-sp {
+  @include g.pc {
+    display: none;
+  }
+}
+
+.br-pc {
+  @include g.sp {
+    display: none;
+  }
+}

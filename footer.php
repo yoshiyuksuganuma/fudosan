@@ -1,7 +1,7 @@
 <footer class="footer">
     <div class="footer__inner">
     <?php get_template_part('includes/footer_nav'); ?>
-        <small class="footer__small">&copy;<?php bloginfo(); ?></small>
+        <small class="footer__small">&copy;2018 <?php bloginfo(); ?></small>
     </div>
 </footer>  
 

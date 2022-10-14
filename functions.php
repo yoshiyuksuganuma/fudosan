@@ -101,32 +101,23 @@ add_theme_support( 'post-thumbnails', array( 'post', 'page' ) );
  * ファイル読み込み
  */
 
-
- /* CSSインライン */
-/* function my_css_minifier() {
-	global $post;
-	$css  = '<style>';
-	$css .= file_get_contents( get_template_directory_uri() . '/dist/css/style.css?' . mt_rand() );
-		$css .= '</style>';
-		$css  = preg_replace( '/\/\*.*?\*\//s', '', $css );
-		$css  = str_replace( array( PHP_EOL, '  ' ), '', $css );
-		$css  = str_replace( '../', get_template_directory_uri() . '/dist/', $css );
-		return $css;
-}
- */
+ 
 
 /* CSS&JS */
 
 function add_files() {
 	wp_enqueue_style( 'abobe-css',  'https://use.typekit.net/cmq7ypr.css', '', mt_rand() );
-	wp_enqueue_style( 'main-css', get_template_directory_uri() . '/dist/css/style.css', '', mt_rand() );
+	wp_enqueue_style( 'main-css', get_template_directory_uri() . '/css/style.css', '', mt_rand() );
+	wp_enqueue_style( 'slick-css',  'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.css', mt_rand() );
+	wp_enqueue_style( 'slick-theme-css', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.css', mt_rand() );
 	wp_deregister_script( 'jquery' );
 	
 	wp_enqueue_script( 'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', '', '', true );
-	wp_enqueue_script( 'lozad', 'https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js', '', '', true );
+	wp_enqueue_script( 'slick', 'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js', '', '', true );
+	 
 	wp_enqueue_script(
 		'common-script',
-		get_template_directory_uri() . '/dist/scripts/common.js',
+		get_template_directory_uri() . '/js/script.js',
 		'',
 		mt_rand(),
 		true
@@ -135,7 +126,6 @@ function add_files() {
 add_action( 'wp_enqueue_scripts', 'add_files' );
 
 
-add_editor_style(get_template_directory_uri() .'/dist/css/editor.css?'.mt_rand());
 
 
 /*
@@ -475,9 +465,25 @@ add_action( 'init', 'create_post_type' );
 function create_post_type() {
 
   register_post_type(
-    'news',
+    'topics',
     array(
-      'label' => 'ニュース',
+      'label' => 'トピックス',
+      'public' => true,
+      'has_archive' => true,
+      'menu_position' => 5,
+	  'show_in_rest' => true,
+      'supports' => array(
+        'title',
+        'editor',
+        'thumbnail',
+        'revisions'
+      ),
+    )
+  );
+  register_post_type(
+    'property',
+    array(
+      'label' => '物件',
       'public' => true,
       'has_archive' => true,
       'menu_position' => 5,
@@ -516,6 +522,17 @@ function create_post_type() {
     )
   );
 }
+
+//投稿タイトル入力欄のプレースホルダ変更
+function change_default_title( $title ) {
+	$screen = get_current_screen();
+	if ( $screen->post_type == 'property' ) {
+		  $title = 'ここに物件名を入力';
+	}
+	
+	  return $title;
+	}
+	add_filter( 'enter_title_here', 'change_default_title' );
 
 //管理画面から通常投稿削除
 function unset_menu(){
@@ -599,3 +616,61 @@ add_action('pre_get_posts', 'change_posts_per_page'); //pre_get_postsでメイ�
 	$pagination = preg_replace( array("/<div[^>]*?>/i", "/<\/div>/i") , array('', ''), $pagination);
 	echo  $pagination;
  }
+
+ // 購読者がダッシュボードにアクセスできないようにする
+add_action( 'auth_redirect', 'subscriber_go_to_home' );
+function subscriber_go_to_home( $user_id ) {
+    if ( !user_can( $user_id, 'edit_posts' ) ) {
+        wp_redirect( get_home_url() );
+    }
+}
+
+// 購読者のツールバーを非表示にする
+add_action( 'after_setup_theme', 'subscriber_hide_admin_bar' );
+function subscriber_hide_admin_bar() {
+    if ( !current_user_can( 'edit_posts' ) ) {
+        show_admin_bar( false );
+    }
+}
+
+/**
+ * ログイン処理をまとめた関数
+ */
+function my_user_login() {
+    $user_name = isset( $_POST['user_name'] ) ? sanitize_text_field( $_POST['user_name'] ) : '';
+    $user_pass = isset( $_POST['user_pass'] ) ? sanitize_text_field( $_POST['user_pass'] ) : '';
+
+    // ログイン認証
+    $creds = array(
+        'user_login' => $user_name,
+        'user_password' => $user_pass,
+    );
+    $user = wp_signon( $creds );
+
+    //ログイン失敗時の処理
+    if ( is_wp_error( $user ) ) {
+        echo $user->get_error_message();
+        exit;
+    }
+
+    //ログイン成功時の処理 
+    wp_redirect( '/' );
+    exit;
+
+    return;
+}
+
+/**
+ * after_setup_theme に処理をフック
+ */
+add_action('after_setup_theme', function() {
+    if ( isset( $_POST['my_submit'] ) && $_POST['my_submit'] === 'login') {
+
+        // nonceチェック
+        if ( !isset( $_POST['my_nonce_name'] ) ) return;
+        if ( !wp_verify_nonce( $_POST['my_nonce_name'], 'my_nonce_action' ) ) return;
+
+        // ログインフォームからの送信があれば
+        my_user_login();
+    }
+});

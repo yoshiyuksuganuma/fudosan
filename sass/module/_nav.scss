@@ -1,17 +1,61 @@
 @use '../global/' as g;
 
 .g-nav {
+  display: none;
+  position: fixed;
+  background-color: rgba(34,34,34, .95);
+  height: 100vh;
+  width: 36.11%;
+  top: 0;
+  right: 0;
+  color: #fff;
+  @include g.sp {
+    width: 75%;
+  }
+  &__logo {
+    width: 42.15px;
+    height: 45px;
+    margin: 0 auto 40px auto;
+  }
+  &__list {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+  &__item {
+    font-size: 2rem;
+    font-weight: bold;
+    @include g.l_spacing(68);
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  &__item:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .hamburger {
-  width: 31px;
-  height: 16px;
+  width: 60px;
+  height: 12px;
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   z-index: 3;
+  &__desc {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  @include g.l_spacing(5);
+  }
 
+  &__bar-wrap  {
+    height: 16px;
+  }
   &__bar {
     position: absolute;
-    width: 31px;
+    width: 22px;
     height: 2px;
     background: #fff;
     transition: opacity 0.3s, transform 0.3s;
@@ -20,13 +64,13 @@
     top: 0px;
   }
   &__bar:nth-of-type(2) {
-    top: 7px;
+    top: 5px;
   }
   &__bar:nth-of-type(3) {
-    top: 14px;
+    top: 10px;
   }
   &__bar:nth-of-type(1).bar-active {
-    transform: translate(0px, 8px) rotate(-45deg);
+    transform: translate(0px, 4px) rotate(-45deg);
   }
   &__bar:nth-of-type(2).bar-active {
     opacity: 0;

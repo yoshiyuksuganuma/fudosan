@@ -1,12 +1,27 @@
 jQuery(function($) {
 "usestrict";
-
   const $win = $(window),
     $header = $("#header");
 
+     //ハンバーガーボタン
+  //連打防止フラグ
+  let $cancelFlag = 0;
+  $("#hamburger").on("click", function () {
+    if ($cancelFlag == 0) {
+      $cancelFlag = 1;
+      $(".hamburger__bar").toggleClass("bar-active");
+      $("#g-nav").fadeToggle();
+      $('#overlay').fadeToggle();
+      setTimeout(function () {
+        $cancelFlag = 0;
+        //300ms後に解除
+      }, 300);
+    }
+  });
+
     //スティッキーヘッダー
     $win.on('load scroll', function () {
-      thisOffset = $('ターゲット要素').offset().top + $('ターゲット要素').outerHeight();
+      thisOffset = $('#fv').offset().top + $('#fv').outerHeight();
       //scrolltopがターゲット要素を超えたら
       if ($win.scrollTop() > thisOffset) {
         $header.addClass('sticky');
@@ -110,32 +125,32 @@ function endLoading(){
 }
 
   //スライダー
-  $("#slider").slick({
-    arrows: false,
-    dots: false,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    speed: 2000,
-    fade: true,
-    pauseOnFocus: false,
-    pauseOnHover: false,
-    pauseOnDotsHover: false,
-  });
+  // $("#fv__slider").slick({
+  //   arrows: false,
+  //   dots: false,
+  //   autoplay: true,
+  //   autoplaySpeed: 3000,
+  //   speed: 2000,
+  //   fade: true,
+  //   pauseOnFocus: false,
+  //   pauseOnHover: false,
+  //   pauseOnDotsHover: false,
+  // });
 
   //スライダー無限ループver
-  $("#slider").slick({
-    arrows: false,
-    dots: false,
-    autoplay: true,
-    autoplaySpeed: 0,
-    speed: 55000,
-    fade: false,
-    loop: true,
-    cssEase: "linear",
-    pauseOnFocus: false,
-    pauseOnHover: false,
-    pauseOnDotsHover: false,
-  });
+  // $("#slider").slick({
+  //   arrows: false,
+  //   dots: false,
+  //   autoplay: true,
+  //   autoplaySpeed: 0,
+  //   speed: 55000,
+  //   fade: false,
+  //   loop: true,
+  //   cssEase: "linear",
+  //   pauseOnFocus: false,
+  //   pauseOnHover: false,
+  //   pauseOnDotsHover: false,
+  // });
 
 
   //スクロールアニメーション htmlにデータ属性をつける hdata-aos="fade-up fade-left "などで指定
@@ -145,21 +160,7 @@ function endLoading(){
     once:true
   });
 
-  //ハンバーガーボタン
-  //連打防止フラグ
-  let $cancelFlag = 0;
-  $("#hamburger").on("click", function () {
-    if ($cancelFlag == 0) {
-      $cancelFlag = 1;
-      $(".hamburger__bar").toggleClass("bar-active");
-      $("#g-nav").fadeToggle();
-
-      setTimeout(function () {
-        $cancelFlag = 0;
-        //300ms後に解除
-      }, 300);
-    }
-  });
+ 
 
 
 

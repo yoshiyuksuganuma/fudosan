@@ -5,6 +5,16 @@
          画像パスやサブタイを設定したい場合は、管理画面のメニュー設定画面の
          表示オプションからタイトル属性、説明欄が表示されるように設定する
     -->
+
+     
+      <button class="hamburger" id="hamburger">
+        <div class="hamburger__bar-wrap">
+        <span class="hamburger__bar"></span>
+        <span class="hamburger__bar"></span>
+        <span class="hamburger__bar"></span>
+        </div>
+        <span class="hamburger__desc">MENU</span>
+      </button>
     
     <!-- グローバルナビ -->
     <?php
@@ -16,16 +26,14 @@
 
       ?>
       <?php if ($menu_items) : ?>
-    <nav class="g-nav">
+    <nav class="g-nav" id="g-nav">
         <ul class="g-nav__list">
-     
+        <img class="g-nav__logo" src="<?php echo get_template_directory_uri() ?>/img/top/nav-logo.png" alt="">
+        
       <?php foreach ($menu_items as $item) : ?>
         <li class="g-nav__item ">
           <a class="g-nav__link " href="<?php echo $item->url; ?>">
-          <?php if($item->description) : ?>
-          <!-- カスタムメニューの説明欄の画像パスを出力 -->
-          <img src="<?php echo esc_url(get_template_directory()) . '/image/' . $item->description; ?>" alt="">
-          <?php endif; ?>
+           
           <?php echo $item->title; ?>
           <!-- カスタムメニューのタイトル属性を出力） -->
           <?php if($item->attr_title) : ?>

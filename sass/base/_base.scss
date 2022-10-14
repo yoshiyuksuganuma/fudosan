@@ -9,13 +9,13 @@
 
 html {
   font-size: 62.5%;
-  @media (max-width: 1100px) {
-    font-size: 0.9vw;
-  }
-  @include g.sp {
-    font-size: 1.6vw;
-  }
-}
+//   @media (max-width: 1100px) {
+//     font-size: 0.9vw;
+//   }
+//   @include g.sp {
+//     font-size: 1.6vw;
+//   }
+ }
 
 //webfontちらつき防止
 html.wf-active {
@@ -23,8 +23,10 @@ html.wf-active {
 }
 body {
   font-size: 1.6rem;
-  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN",
-    "Hiragino Sans", Meiryo, sans-serif;
+  color: #333;
+  font-family: 'Montserrat', 游ゴシック体;
+  font-weight: normal;
+  
 }
 
 img {

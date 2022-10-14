@@ -1,6 +1,29 @@
 @use '../global' as g;
 
 .header {
+  width: 100%;
+  padding: 30px 58px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 6;
+  transition: all .3s ease-in-out;
+  @include g.sp {
+    padding: 20px 15px 0 15px;
+  }
+  &__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   &__logo {
+      
+    @include g.sp  {
+      width: 189px;
+  }
+  img {
+    position: relative;
+    z-index: -1;
+  }
   }
 } //header
